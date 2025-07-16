@@ -1,19 +1,17 @@
-<<<<<<< HEAD
-# Run and deploy your AI Studio app
+# Attack-Simulator v1.27
 
-This contains everything you need to run your app locally.
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
-=======
-# Attack-Simulator
 This is to simulate and demonstrate the protection of pre-defined and customized web and system attack. 
->>>>>>> be616792c8fc35e933617cd373895a0d4cf9dd8c
+
+Please read the Deployment guide -> Attack-Simulator Deployment Guide v1.27.docx
+
+In case you want to build your own image , create that from the Dockerfile directly.
+
+APP UI is very simple :
+
+<img width="1482" height="772" alt="image" src="https://github.com/user-attachments/assets/eca39a00-9013-41f2-bb63-f2cf269dacdd" />
+
+<img width="1457" height="497" alt="image" src="https://github.com/user-attachments/assets/81917cd1-4e21-49f2-864e-f8034c29e10d" />
+
+CAUTION:
+
+Please be sure to use this deployment scenario only in completely isolated, non-production test clusters. Do not use this configuration in any production or critical environment!

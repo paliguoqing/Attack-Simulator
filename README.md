@@ -2,7 +2,7 @@
 
 This is to simulate and demonstrate the protection of pre-defined and customized web and system attack , include : 
 
-- Web attack from contianer
+- Web attack from container
 - Web attack from curretn browser
 - System script/ Kuberetes attack from contianer
 

@@ -1,10 +1,14 @@
 # Attack-Simulator v1.27
 
-This is to simulate and demonstrate the protection of pre-defined and customized web and system attack. 
+This is to simulate and demonstrate the protection of pre-defined and customized web and system attack , include : 
 
-Please read the Deployment guide -> Attack-Simulator Deployment Guide v1.27.docx
+- Web attack from contianer
+- Web attack from curretn browser
+- System script/ Kuberetes attack from contianer
 
-In case you want to build your own image , create that from the Dockerfile directly.
+By default you can use docker image paliguoqing/attack-simulator:v1-1750402414 directly , Please read the Deployment guide -> Attack-Simulator Deployment Guide v1.27.docx
+
+In case you want to build your own image , create that from the Dockerfile . 
 
 APP UI is very simple :
 

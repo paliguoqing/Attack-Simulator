@@ -4,7 +4,7 @@ This is to simulate and demonstrate the protection of pre-defined and customized
 
 - Web attack from container
 - Web attack from curretn browser
-- System script/ Kuberetes attack from contianer
+- System script/ Kuberetes attack from container
 
 Please make sure you installed prisma cloud defender or cortex cloud xdr agent to your runtime before test the scenarios. 
 

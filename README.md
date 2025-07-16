@@ -1,6 +1,6 @@
 # Attack-Simulator v1.27
 
-This is to simulate and demonstrate the protection of pre-defined and customized web and system attack , include : 
+This is to simulate and demonstrate the protection of pre-defined and customized web and system attack include : 
 
 - Web attack from container
 - Web attack from curretn browser

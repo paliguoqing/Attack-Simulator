@@ -1,0 +1,6 @@
+{
+  "name": "Cloud Security Attack Simulator",
+  "description": "A tool for security architects to define, manage, and simulate various cyber attacks (web, process, network, file system, K8s) for POV demonstrations. Configurations can be imported and exported.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
